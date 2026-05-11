@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pointer</title>
+  <script>
+    if (typeof module !== 'undefined') {
+      window.__savedModule  = module;
+      window.__savedExports = typeof exports !== 'undefined' ? exports : undefined;
+      module = undefined;
+    }
+  </script>
+  <script src="./node_modules/ngl/dist/ngl.js"></script>
+  <script>
+    if (window.__savedModule !== undefined) {
+      module  = window.__savedModule;
+      exports = window.__savedExports;
+    }
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="toolbar">
+  <button id="open-btn">Open PDB</button>
+  <span id="filename">— Select a PDB file —</span>
+  <button id="clear-all">Clear All</button>
+</div>
+
+<div id="main">
+
+  <div id="left-panel">
+
+    <div id="sequence-area">
+      <div style="color:#445;font-size:12px;text-align:center;padding-top:40px">
+        Open a PDB file to get started
+      </div>
+    </div>
+
+    <div id="residue-status"></div>
+
+    <div id="controls-area">
+
+      <!-- Mode selector -->
+      <div class="mode-row">
+        <button class="mode-btn active" data-mode="mutation">● Mutation</button>
+        <button class="mode-btn"        data-mode="fixed">■ Fixed</button>
+      </div>
+
+      <!-- Index / chain toggles -->
+      <div class="chain-prefix-row">
+        <label class="toggle-label">
+          <input type="checkbox" id="seq-index-toggle">
+          Sequential index (from 1)
+        </label>
+        <label class="toggle-label" style="margin-top:3px">
+          <input type="checkbox" id="chain-prefix-toggle">
+          Include chain name in list
+        </label>
+      </div>
+
+      <!-- Mutation list -->
+      <div class="control-group">
+        <div class="control-label">
+          <span class="color-dot" style="background:#cc5500"></span>
+          Mutation residues (comma-separated)
+        </div>
+        <input id="mutation-input" class="residue-input"
+               type="text" placeholder="e.g. 23,45,67">
+        <button class="clear-btn" id="clear-mutation">Clear</button>
+      </div>
+
+      <!-- Group conversion buttons -->
+      <div class="convert-row">
+        <button class="convert-btn" id="mut-complement"
+                title="Set all non-mutation residues as fixed">Others → Fixed</button>
+        <button class="convert-btn swap" id="swap-groups"
+                title="Swap mutation and fixed groups">↕ Swap</button>
+        <button class="convert-btn" id="fix-complement"
+                title="Set all non-fixed residues as mutation">Others → Mut</button>
+      </div>
+
+      <!-- Fixed list -->
+      <div class="control-group">
+        <div class="control-label">
+          <span class="color-dot" style="background:#2255cc"></span>
+          Fixed residues (comma-separated)
+        </div>
+        <input id="fixed-input" class="residue-input"
+               type="text" placeholder="e.g. 12,34,89">
+        <button class="clear-btn" id="clear-fixed">Clear</button>
+      </div>
+
+      <!-- Legend -->
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:#cc5500"></div>Mutation
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:#2255cc"></div>Fixed
+        </div>
+        <div class="legend-item">
+          <div class="legend-swatch" style="background:#263048"></div>Other
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 3D viewer -->
+  <div id="viewer-wrap">
+    <div id="ngl-viewport"></div>
+    <div id="empty-msg">
+      <h3>Pointer</h3>
+      <p>Open a PDB file to get started</p>
+    </div>
+  </div>
+
+</div>
+
+<script src="renderer.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "pointer",
+  "version": "1.0.0",
+  "description": "Protein residue selector for mutation design",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron": "^28.0.0",
+    "ngl": "^2.1.0"
+  }
+}
