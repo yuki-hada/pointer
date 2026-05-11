@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, Menu, shell } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -20,7 +20,29 @@ function createWindow() {
   mainWindow.loadFile('index.html');
 }
 
-app.whenReady().then(createWindow);
+function buildMenu() {
+  const helpMenu = {
+    label: 'Help',
+    submenu: [
+      {
+        label: 'Open Source Licenses',
+        click: () => shell.openPath(path.join(app.getAppPath(), 'LICENSES.txt')),
+      },
+    ],
+  };
+
+  const template =
+    process.platform === 'darwin'
+      ? [{ label: app.name, submenu: [{ role: 'quit' }] }, { role: 'editMenu' }, helpMenu]
+      : [{ role: 'editMenu' }, helpMenu];
+
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+}
+
+app.whenReady().then(() => {
+  buildMenu();
+  createWindow();
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
