@@ -24,13 +24,16 @@
       "node_modules/**"
     ],
     "win": {
-      "target": [{ "target": "nsis", "arch": ["x64"] }]
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "artifactName": "pointer-${version}-windows.${ext}"
     },
     "mac": {
-      "target": [{ "target": "dmg", "arch": ["arm64"] }]
+      "target": [{ "target": "dmg", "arch": ["arm64"] }],
+      "artifactName": "pointer-${version}-mac-arm64.${ext}"
     },
     "linux": {
-      "target": [{ "target": "AppImage", "arch": ["x64"] }]
+      "target": [{ "target": "AppImage", "arch": ["x64"] }],
+      "artifactName": "pointer-${version}-linux.${ext}"
     }
   },
   "dependencies": {
