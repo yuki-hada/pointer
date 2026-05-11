@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog, Menu, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -26,7 +26,15 @@ function buildMenu() {
     submenu: [
       {
         label: 'Open Source Licenses',
-        click: () => shell.openPath(path.join(app.getAppPath(), 'LICENSES.txt')),
+        click: () => {
+          const content = fs.readFileSync(path.join(app.getAppPath(), 'LICENSES.txt'), 'utf-8');
+          dialog.showMessageBox(mainWindow, {
+            title: 'Open Source Licenses',
+            message: 'Open Source Licenses',
+            detail: content,
+            buttons: ['OK'],
+          });
+        },
       },
     ],
   };
