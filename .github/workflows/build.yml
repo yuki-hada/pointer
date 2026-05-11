@@ -6,6 +6,9 @@ on:
       - "v*"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     strategy:
@@ -14,12 +17,15 @@ jobs:
           - os: windows-latest
             script: build:win
             artifact: dist/*.exe
+            label: windows
           - os: macos-14
             script: build:mac
             artifact: dist/*.dmg
+            label: mac-arm64
           - os: ubuntu-latest
             script: build:linux
             artifact: dist/*.AppImage
+            label: linux
 
     runs-on: ${{ matrix.os }}
 
@@ -33,13 +39,24 @@ jobs:
 
       - run: npm ci
 
+      - name: Get version
+        id: pkg
+        shell: bash
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
       - name: Build
         run: npm run ${{ matrix.script }}
         env:
-          CSC_IDENTITY_AUTO_DISCOVERY: false  # skip code signing
+          CSC_IDENTITY_AUTO_DISCOVERY: false
 
       - uses: actions/upload-artifact@v4
         with:
-          name: pointer-${{ matrix.os }}
+          name: pointer-${{ steps.pkg.outputs.version }}-${{ matrix.label }}
           path: ${{ matrix.artifact }}
           if-no-files-found: error
+
+      - name: Upload to Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ matrix.artifact }}
